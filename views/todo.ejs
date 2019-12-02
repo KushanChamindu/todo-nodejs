@@ -1,0 +1,130 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Todo List</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="./assets/todo-list.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="./assets/styles.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="./assets/css/mobiscroll.javascript.min.css">
+    <script src="./assets/js/mobiscroll.javascript.min.js"></script>
+
+</head>
+<body>
+    <h1>Todo List</h1>
+    <div id="todo-table">
+        <form action="/todo">
+            <input type="text" name="item" placeholder="Add new item..." required>
+            <div id="time-input">
+                    <input mbsc-input data-input-style="box" data-label-style="stacked" id="demo-datetime-expanded" name="datetime"/>
+            </div>
+            <button type="submit">Add Item</button>
+        </form>
+        <ul>
+            <% for(var i=0;i<todos.length;i++){ %>
+                <li><%= todos[i].item%><p class="shade">  (<%= todos[i].time%>)</p><p class="timer">Timer is starting..</p> <p style="display: none"><%=todos[i].ID%></p></li>
+            <% } %>
+        </ul>
+        
+    </div>
+    
+</body>
+<script>
+    $(document).ready(function(){
+        window.setInterval(function() {   //calls click event after a certain time
+            var today=new Date();
+            <%for(var i=0;i<todos.length;i++){%>
+                console.log('JHGGKHGKHJGHK');
+                var date_str="<%=todos[i].time%>";
+                var date_object=new Date(date_str);
+                var difference=date_object-today;
+                var num_year=Math.floor(difference/(3.154*(10**10)));
+                difference=difference%(3.154*10**10);
+                var num_mounth=Math.floor(difference/(2.628*10**9));
+                difference=difference%(2.628*10**9);
+                var num_date=Math.floor(difference/(8.64*10**7));
+                difference=difference%(8.64*10**7);
+                var num_hours=Math.floor(difference/(3.6*10**6));
+                difference=difference%(3.6*10**6);
+                var num_min=Math.floor(difference/(60000));
+                difference=difference%(60000);
+                var num_sec=Math.floor(difference/(1000));
+                // console.log(num_sec);
+                    if(num_year==0 && num_mounth==0 && num_date==0 && num_hours==0 && num_min==0 && num_sec<60){
+                        document.getElementsByClassName('timer')["<%=i%>"].style.color = "red";
+                    }                    
+                    if(num_year>=0 && num_mounth>=0 && num_date>=0 && num_hours>=0 && num_min>=0 && num_sec>=0){document.getElementsByClassName('timer')["<%=i%>"].innerHTML=num_year+" Years "+" mounth "+num_date+" days "+num_hours+" hours "+num_min+" min "+num_sec+" sec";}
+                    if(num_year==0 && num_mounth>=0 && num_date>=0 && num_hours>=0 && num_min>=0 && num_sec>=0){document.getElementsByClassName('timer')["<%=i%>"].innerHTML=num_mounth+" mounth "+num_date+" days "+num_hours+" hours "+num_min+" min "+num_sec+" sec";}
+                    if(num_year==0 && num_mounth==0 && num_date>=0 && num_hours>=0 && num_min>=0 && num_sec>=0){document.getElementsByClassName('timer')["<%=i%>"].innerHTML=num_date+" days "+num_hours+" hours "+num_min+" min "+num_sec+" sec";}
+                    if(num_year==0 && num_mounth==0 && num_date==0 && num_hours>=0 && num_min>=0 && num_sec>=0){document.getElementsByClassName('timer')["<%=i%>"].innerHTML=num_hours+" hours "+num_min+" min "+num_sec+" sec";}
+                    if(num_year==0 && num_mounth==0 && num_date==0 && num_hours==0 && num_min>=0 && num_sec>=0){document.getElementsByClassName('timer')["<%=i%>"].innerHTML=num_min+" min "+num_sec+" sec";}
+                    if(num_year==0 && num_mounth==0 && num_date==0 && num_hours==0 && num_min==0 && num_sec>=0){document.getElementsByClassName('timer')["<%=i%>"].innerHTML=num_sec+' sec  <i class="material-icons" style="font-size:17px;">notifications_active</i>';}
+                    if(num_year==0 && num_mounth==0 && num_date==0 && num_hours==0 && num_min==0 && num_sec==0){document.getElementsByClassName('timer')["<%=i%>"].style.color = "red";
+                    document.getElementsByClassName('timer')["<%=i%>"].innerHTML='Time passed !! We done that  <i class="material-icons" style="font-size:18px;">sentiment_very_satisfied</i>';}
+                    if(num_year<0 || num_mounth<0 || num_date<0 || num_hours<0 || num_min<0 || num_sec<0 ){
+                        document.getElementsByClassName('timer')["<%=i%>"].style.color = "red";
+                        document.getElementsByClassName('timer')["<%=i%>"].innerHTML='Time passed !! We done that  <i class="material-icons" style="font-size:18px;">sentiment_very_satisfied</i>';
+                    }
+             <%} %>
+        }, 950); 
+        $(".kushan").hover(function(){
+            
+            console.log(str);
+        });
+    });
+    mobiscroll.settings = {
+        lang: 'en',                       // Specify language like: lang: 'pl' or omit setting to use default
+        theme: 'ios',                     // Specify theme like: theme: 'ios' or omit setting to use default
+        display: 'bubble'                 // Specify display mode like: display: 'bottom' or omit setting to use default
+    };
+    
+    var now = new Date();
+    
+    mobiscroll.datetime('#demo-datetime', {
+        dateWheels: '|D M d|',            // More info about dateWheels: https://docs.mobiscroll.com/4-8-3/javascript/datetime#localization-dateWheels
+        onInit: function (event, inst) {  // More info about onInit: https://docs.mobiscroll.com/4-8-3/javascript/datetime#event-onInit
+            inst.setVal(now, true);
+        }
+    });
+    
+    mobiscroll.datetime('#demo-datetime-expanded', {
+        onInit: function (event, inst) {  // More info about onInit: https://docs.mobiscroll.com/4-8-3/javascript/datetime#event-onInit
+            inst.setVal(now, true);
+        }
+    });
+    
+    mobiscroll.date('#demo-datetime-date', {
+        onInit: function (event, inst) {  // More info about onInit: https://docs.mobiscroll.com/4-8-3/javascript/datetime#event-onInit
+            inst.setVal(now, true);
+        }
+    });
+    
+    mobiscroll.time('#demo-datetime-time', {
+        onInit: function (event, inst) {  // More info about onInit: https://docs.mobiscroll.com/4-8-3/javascript/datetime#event-onInit
+            inst.setVal(now, true);
+        }
+    });
+    
+    mobiscroll.datetime('#demo-datetime-non-form', {
+        onInit: function (event, inst) {  // More info about onInit: https://docs.mobiscroll.com/4-8-3/javascript/datetime#event-onInit
+            inst.setVal(now, true);
+        }
+    });
+    
+    var instance = mobiscroll.datetime('#demo-datetime-external', {
+        showOnTap: false,                 // More info about showOnTap: https://docs.mobiscroll.com/4-8-3/javascript/datetime#opt-showOnTap
+        showOnFocus: false,               // More info about showOnFocus: https://docs.mobiscroll.com/4-8-3/javascript/datetime#opt-showOnFocus
+        onInit: function (event, inst) {  // More info about onInit: https://docs.mobiscroll.com/4-8-3/javascript/datetime#event-onInit
+            inst.setVal(new Date(), true);
+        }
+    });
+    
+    document
+        .getElementById('show-demo-datetime-external')
+        .addEventListener('click', function () {
+            instance.show();
+        }, false);
+</script>
+</html>
